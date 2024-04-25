@@ -4,9 +4,9 @@ import lombok.*;
 
 @Getter
 @Setter
-/* @AllArgsConstructor
+/*@AllArgsConstructor
 @NoArgsConstructor
-@ToString */
+@ToString*/
 @Data
 public class RequestDoctorDto {
     private String name;

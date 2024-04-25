@@ -4,8 +4,8 @@ import com.devstack.healthcare.system.dto.request.RequestDoctorDto;
 import com.devstack.healthcare.system.service.DoctorService;
 import com.devstack.healthcare.system.util.StandardResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,8 +19,8 @@ public class DoctorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandardResponse> createDoctor(@RequestBody RequestDoctorDto doctorDto){
-
         doctorService.createDoctor(doctorDto);
         return new ResponseEntity<>(
                 new StandardResponse(201,"doctor was saved!",doctorDto.getName()),
@@ -43,7 +43,7 @@ public class DoctorController {
     ){
         doctorService.updateDoctor(id,doctorDto);
         return new ResponseEntity<>(
-                new StandardResponse(201,"doctor was updated!",doctorDto.getName()),
+                new StandardResponse(201,"update data!",doctorDto.getName()),
                 HttpStatus.CREATED
         );
     }
@@ -52,23 +52,22 @@ public class DoctorController {
     public ResponseEntity<StandardResponse> deleteDoctor(@PathVariable long id){
         doctorService.deleteDoctor(id);
         return new ResponseEntity<>(
-                new StandardResponse(204,"doctor data deleted!",id),
+                new StandardResponse(204,"deleted data!",id),
                 HttpStatus.NO_CONTENT
         );
     }
 
     @GetMapping(path = "/list", params = {"searchText","page","size"})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_DOCTOR')")
     public ResponseEntity<StandardResponse> findAllDoctors(
             @RequestParam String searchText,
             @RequestParam int page,
             @RequestParam int size
     ){
         return new ResponseEntity<>(
-                new StandardResponse(200,"doctor data list!",doctorService.getAllDoctors(
-                        searchText, page, size
-                )),
+                new StandardResponse(200,"data List!",doctorService.getAllDoctors(
+                        searchText, page, size)),
                 HttpStatus.OK
         );
     }
-
 }
