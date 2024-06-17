@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         User user = new User(
                 userDto.getId(),
                 userDto.getFullName(),
-                userDto.getEmail(),
+                userDto.getUsername(),
                 passwordEncoder.encode(userDto.getPassword()),
                 true,
                 true,
